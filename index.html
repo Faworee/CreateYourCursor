@@ -25,16 +25,20 @@ body {
     padding: 2rem;
     transform: scale(0.8);
     box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 @media (max-width: 639px) {
     body {
         display: block;
+        overflow-x: hidden;
     }
     .wrapper {
         transform: scale(1);
         width: 100%;
         height: auto;
+        padding: 1rem;
+        overflow-x: hidden;
     }
 }
 
@@ -74,6 +78,7 @@ body {
             gap: 2rem;
             max-height: calc(100vh - 8rem);
             overflow-y: auto;
+            overflow-x: hidden;
             padding-right: 1rem;
         }
 
@@ -141,6 +146,8 @@ body {
         .download-section {
             grid-area: download-section;
             display: flex;
+            flex-direction: column;
+            gap: 1rem;
             justify-content: center;
         }
         
@@ -372,6 +379,25 @@ body {
             background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
             transform: translateY(-1px);
         }
+
+        .btn-copy {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            border: 2px solid #6d28d9;
+            border-radius: 0.25rem;
+            width: 1.5rem;
+            height: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+            font-size: 12px;
+        }
+
+        .btn-copy:hover {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+        }
         
         .section {
             background: rgba(15, 23, 42, 0.5);
@@ -480,16 +506,51 @@ body {
             justify-content: center;
             cursor: pointer;
             transition: background-color 0.3s ease;
-
-    
         }
 
         @media (max-width: 639px) {
-    .image-options-section .flex.items-center.justify-between.gap-4 {
-        flex-direction: column;
-        gap: 1rem;
-    }
+            .image-options-section .flex.items-center.justify-between.gap-4 {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .container {
+                padding: 1rem;
+            }
+        }
+
+      select {
+    background: #1a1a1a;
+    border: 2px solid #475569;
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #e2e8f0;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
+.btn-paste {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border: 2px solid #047857;
+    border-radius: 0.25rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+    font-size: 12px;
+}
+
+.btn-paste:hover {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+        select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -538,13 +599,20 @@ body {
                                 <span class="slider"></span>
                             </label>
                         </div>
-                          <div class="flex items-center justify-between">
-                                <label class="text-sm font-medium text-slate-300">Use Gradient Fill</label>
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="useGradientFill">
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
+                        <div class="flex items-center justify-between">
+                            <label class="text-sm font-medium text-slate-300">Use Gradient Fill</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="useGradientFill">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div id="useOutlineGradientFillOption" class="flex items-center justify-between hidden">
+                            <label class="text-sm font-medium text-slate-300">Use Outline Gradient</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="useOutlineGradientFill">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
                         <div id="solid-fill-options" class="space-y-4">
                             <div class="flex items-center justify-between" id="solidFillColorContainer">
                                 <label class="text-sm font-medium text-slate-300">Solid Fill Color</label>
@@ -560,8 +628,16 @@ body {
                             <div id="gradient-fill-options" class="space-y-4 hidden">
                                 <div id="gradient-fill-colors" class="flex flex-wrap gap-3 justify-center">
                                 </div>
-                                <button id="addFillColor" class="w-full btn-secondary">Add Fill Gradient Color</button>
-                            </div>
+                                      
+                                <div class="flex gap-2">
+                                          
+                                    <button id="addFillColor" class="flex-1 btn-secondary">Add Color</button>
+                  
+                                </div>                          
+
+
+
+                   </div>
                         </div>
                     </div>
                 </div>
@@ -580,6 +656,14 @@ body {
                             </label>
                         </div>
                         
+                        <div id="useFillGradientOutlineOption" class="flex items-center justify-between hidden">
+                            <label class="text-sm font-medium text-slate-300">Use Fill Gradient</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="useFillGradientOutline">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
                         <div id="solid-outline-options" class="space-y-4">
                             <div class="flex items-center justify-between">
                                 <label class="text-sm font-medium text-slate-300">Solid Outline Color</label>
@@ -704,10 +788,22 @@ body {
                 </div>
 
                 <div class="section download-section">
-
-                    <button id="downloadBtn" class="btn-primary">
-                        Download as PNG
-                    </button>
+                    <div class="space-y-4">
+                        <div class="flex gap-4">
+                            <div class="flex-1">
+                                <label class="text-sm font-medium text-slate-300 block mb-2">Export Size</label>
+                                <select id="exportSize" class="w-full">
+                                    <option value="512">512x512</option>
+                                    <option value="1024">1024x1024</option>
+                                    <option value="2048" selected>2048x2048</option>
+                                    <option value="4096">4096x4096</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button id="downloadBtn" class="btn-primary">
+                            Download as PNG
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -759,6 +855,11 @@ body {
             const removeImageBtn = document.getElementById('removeImageBtn');
             const downloadBtn = document.getElementById('downloadBtn');
             const solidOutlineOptionsDiv = document.getElementById('solid-outline-options');
+            const exportSizeSelect = document.getElementById('exportSize');
+            const useOutlineGradientFillCheckbox = document.getElementById('useOutlineGradientFill');
+            const useOutlineGradientFillOption = document.getElementById('useOutlineGradientFillOption');
+            const useFillGradientOutlineCheckbox = document.getElementById('useFillGradientOutline');
+            const useFillGradientOutlineOption = document.getElementById('useFillGradientOutlineOption');
             
             let currentShape = 'squircle';
             let solidFillColor = '#ffffff';
@@ -778,6 +879,7 @@ body {
             let imageRotation = 0;
             let imageOffsetX = 0;
             let imageOffsetY = 0;
+            let copiedColors = null;
 
             const syncSliderInput = (slider, input, callback) => {
                 const isInt = slider.step === "1";
@@ -812,24 +914,66 @@ body {
                 glowColorOptionDiv.classList.toggle('hidden', isOutlineGlowActive);
                 removeImageBtn.classList.toggle('hidden', !uploadedImage);
                 imageOptionsDiv.classList.toggle('hidden', !uploadedImage);
+                
+                useOutlineGradientFillOption.classList.toggle('hidden', !(isGradientFillActive && isGradientOutlineActive));
+                
+                useFillGradientOutlineOption.classList.toggle('hidden', !(isGradientFillActive && isGradientOutlineActive));
             };
 
-            const addGradientColorInput = (container, defaultColor) => {
-                const colorWrapper = document.createElement('div');
-                colorWrapper.className = 'gradient-color-input-group';
-                colorWrapper.innerHTML = `
-                    <input type="color" value="${defaultColor}">
-                    <button class="remove-gradient-color-btn">&times;</button>
-                `;
-                container.appendChild(colorWrapper);
-                colorWrapper.querySelector('input').addEventListener('input', drawCursor);
-                colorWrapper.querySelector('.remove-gradient-color-btn').addEventListener('click', () => {
-                    if (container.children.length > 1) {
-                        colorWrapper.remove();
-                        drawCursor();
-                    }
-                });
-                drawCursor();
+ const addGradientColorInput = (container, defaultColor) => {
+    const colorWrapper = document.createElement('div');
+    colorWrapper.className = 'gradient-color-input-group';
+    colorWrapper.innerHTML = `
+        <input type="color" value="${defaultColor}">
+        <button class="btn-copy" title="Copy this color">📋</button>
+        <button class="btn-paste" title="Paste color">📄</button>
+        <button class="remove-gradient-color-btn">&times;</button>
+    `;
+    container.appendChild(colorWrapper);
+    
+    const colorInput = colorWrapper.querySelector('input');
+    const copyBtn = colorWrapper.querySelector('.btn-copy');
+    const pasteBtn = colorWrapper.querySelector('.btn-paste');
+    const removeBtn = colorWrapper.querySelector('.remove-gradient-color-btn');
+    
+    colorInput.addEventListener('input', drawCursor);
+    
+    copyBtn.addEventListener('click', () => {
+        copiedColors = { colors: [colorInput.value], source: container };
+        copyBtn.textContent = '✓';
+        setTimeout(() => {
+            copyBtn.textContent = '📋';
+        }, 1000);
+    });
+    
+    pasteBtn.addEventListener('click', () => {
+        if (copiedColors && copiedColors.colors && copiedColors.colors.length > 0) {
+            colorInput.value = copiedColors.colors[0];
+            drawCursor();
+            pasteBtn.textContent = '✓';
+            setTimeout(() => {
+                pasteBtn.textContent = '📄';
+            }, 1000);
+        }
+    });
+    
+    removeBtn.addEventListener('click', () => {
+        if (container.children.length > 1) {
+            colorWrapper.remove();
+            drawCursor();
+        }
+    });
+    
+    drawCursor();
+};
+            const pasteColors = (targetContainer) => {
+                if (copiedColors && copiedColors.colors) {
+                    targetContainer.innerHTML = '';
+                    copiedColors.colors.forEach(color => {
+                        addGradientColorInput(targetContainer, color);
+                    });
+                    drawCursor();
+                }
             };
 
             const getGradientColors = (container) => {
@@ -947,14 +1091,24 @@ body {
             const drawCursor = () => {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 const center = { x: canvas.width / 2, y: canvas.height / 2 };
-                const size = 150;
+                const maxGlowRadius = addGlowCheckbox.checked ? borderThickness * 2 * glowAmount : 0;
+                const availableSize = Math.min(canvas.width, canvas.height) - maxGlowRadius * 2 - 20;
+                const size = Math.min(150, availableSize);
+                
                 const fillPath = new Path2D();
                 drawShape(fillPath, center, size - borderThickness);
                 
                 let fillDrawn = false;
                 if (useSolidFillCheckbox.checked) {
                     if (useGradientFillCheckbox.checked) {
-                        const colors = getGradientColors(gradientFillColorsDiv);
+                        let colors;
+                        
+                        if (useOutlineGradientFillCheckbox.checked && useGradientOutlineCheckbox.checked) {
+                            colors = getGradientColors(gradientOutlineColorsDiv);
+                        } else {
+                            colors = getGradientColors(gradientFillColorsDiv);
+                        }
+                        
                         if (colors.length > 1) {
                             const gradient = ctx.createLinearGradient(0, center.y - (size - borderThickness) / 2, 0, center.y + (size - borderThickness) / 2);
                             const step = 1 / (colors.length - 1);
@@ -994,7 +1148,14 @@ body {
                     let currentGlowColor;
                     if (useOutlineGlowCheckbox.checked) {
                         if (useGradientOutlineCheckbox.checked) {
-                            const colors = getGradientColors(gradientOutlineColorsDiv);
+                            let colors;
+                            
+                            if (useFillGradientOutlineCheckbox.checked && useGradientFillCheckbox.checked) {
+                                colors = getGradientColors(gradientFillColorsDiv);
+                            } else {
+                                colors = getGradientColors(gradientOutlineColorsDiv);
+                            }
+                            
                             currentGlowColor = colors.length > 0 ? colors[0] : outlineColor;
                         } else {
                             currentGlowColor = outlineColor;
@@ -1013,7 +1174,14 @@ body {
 
                 if (borderThickness > 0) {
                     if (useGradientOutlineCheckbox.checked) {
-                        const colors = getGradientColors(gradientOutlineColorsDiv);
+                        let colors;
+                        
+                        if (useFillGradientOutlineCheckbox.checked && useGradientFillCheckbox.checked) {
+                            colors = getGradientColors(gradientFillColorsDiv);
+                        } else {
+                            colors = getGradientColors(gradientOutlineColorsDiv);
+                        }
+                        
                         if (colors.length > 1) {
                             const gradient = ctx.createLinearGradient(0, center.y - size/2, 0, center.y + size/2);
                             const step = 1 / (colors.length - 1);
@@ -1077,48 +1245,79 @@ body {
                 currentShape = button.dataset.shape;
                 drawCursor();
             }));
+            
             useSolidFillCheckbox.addEventListener('change', (e) => {
                 updateControlsVisibility();
                 drawCursor();
             });
+            
             useGradientFillCheckbox.addEventListener('change', (e) => {
+                if (e.target.checked && useOutlineGradientFillCheckbox.checked) {
+                    useOutlineGradientFillCheckbox.checked = false;
+                }
                 updateControlsVisibility();
                 drawCursor();
             });
+            
             useGradientOutlineCheckbox.addEventListener('change', (e) => {
+                if (e.target.checked && useFillGradientOutlineCheckbox.checked) {
+                    useFillGradientOutlineCheckbox.checked = false;
+                }
                 updateControlsVisibility();
                 drawCursor();
             });
+            
+            useOutlineGradientFillCheckbox.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    useFillGradientOutlineCheckbox.checked = false;
+                }
+                drawCursor();
+            });
+            
+            useFillGradientOutlineCheckbox.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    useOutlineGradientFillCheckbox.checked = false;
+                }
+                drawCursor();
+            });
+            
             addGlowCheckbox.addEventListener('change', (e) => {
                 addGlow = e.target.checked;
                 updateControlsVisibility();
                 drawCursor();
             });
+            
             useOutlineGlowCheckbox.addEventListener('change', (e) => {
                 useOutlineGlow = e.target.checked;
                 updateControlsVisibility();
                 drawCursor();
             });
+            
             solidFillColorInput.addEventListener('input', (e) => {
                 solidFillColor = e.target.value;
                 drawCursor();
             });
+            
             outlineColorInput.addEventListener('input', (e) => {
                 outlineColor = e.target.value;
                 drawCursor();
             });
+            
             glowColorInput.addEventListener('input', (e) => {
                 glowColor = e.target.value;
                 drawCursor();
             });
-            addFillColorBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                addGradientColorInput(gradientFillColorsDiv, '#000000');
-            });
-            addOutlineColorBtn.addEventListener('click', (e) => {
-                e.preventDefault();
-                addGradientColorInput(gradientOutlineColorsDiv, '#000000');
-            });
+            
+        addFillColorBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    addGradientColorInput(gradientFillColorsDiv, '#000000');
+});
+
+addOutlineColorBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    addGradientColorInput(gradientOutlineColorsDiv, '#000000');
+});
+            
             imageUploadInput.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (file) {
@@ -1143,29 +1342,43 @@ body {
                     updateControlsVisibility();
                 }
             });
+            
             removeImageBtn.addEventListener('click', () => {
                 uploadedImage = null;
                 imageUploadInput.value = '';
                 updateControlsVisibility();
                 drawCursor();
             });
+            
           downloadBtn.addEventListener('click', () => {
+                const exportSize = parseInt(exportSizeSelect.value);
                 const tempCanvas = document.createElement('canvas');
-                tempCanvas.width = canvas.width;
-                tempCanvas.height = canvas.height;
+                tempCanvas.width = exportSize;
+                tempCanvas.height = exportSize;
                 const tempCtx = tempCanvas.getContext('2d');
                 
                 const center = { x: tempCanvas.width / 2, y: tempCanvas.height / 2 };
-                const size = 150;
+                const maxGlowRadius = addGlowCheckbox.checked ? (borderThickness * (exportSize / 400)) * 2 * glowAmount : 0;
+                const availableSize = Math.min(tempCanvas.width, tempCanvas.height) - maxGlowRadius * 2 - (20 * (exportSize / 400));
+                const size = availableSize;
+                const scaledBorderThickness = borderThickness * (exportSize / 400);
+                
                 const fillPath = new Path2D();
-                drawShape(fillPath, center, size - borderThickness);
+                drawShape(fillPath, center, size - scaledBorderThickness);
 
                 let fillDrawn = false;
                 if (useSolidFillCheckbox.checked) {
                     if (useGradientFillCheckbox.checked) {
-                        const colors = getGradientColors(gradientFillColorsDiv);
+                        let colors;
+                        
+                        if (useOutlineGradientFillCheckbox.checked && useGradientOutlineCheckbox.checked) {
+                            colors = getGradientColors(gradientOutlineColorsDiv);
+                        } else {
+                            colors = getGradientColors(gradientFillColorsDiv);
+                        }
+                        
                         if (colors.length > 1) {
-                            const gradient = tempCtx.createLinearGradient(0, center.y - (size - borderThickness) / 2, 0, center.y + (size - borderThickness) / 2);
+                            const gradient = tempCtx.createLinearGradient(0, center.y - (size - scaledBorderThickness) / 2, 0, center.y + (size - scaledBorderThickness) / 2);
                             const step = 1 / (colors.length - 1);
                             colors.forEach((color, index) => {
                                 gradient.addColorStop(step * index, hexToRgbA(color, fillOpacity));
@@ -1186,10 +1399,12 @@ body {
                     tempCtx.clip(fillPath);
                     tempCtx.globalAlpha = imageOpacity;
                     
-                    const scaledWidth = uploadedImage.width * imageScale;
-                    const scaledHeight = uploadedImage.height * imageScale;
+                    const scaledWidth = uploadedImage.width * imageScale * (exportSize / 400);
+                    const scaledHeight = uploadedImage.height * imageScale * (exportSize / 400);
+                    const scaledOffsetX = imageOffsetX * (exportSize / 400);
+                    const scaledOffsetY = imageOffsetY * (exportSize / 400);
 
-                    tempCtx.translate(center.x + imageOffsetX, center.y + imageOffsetY);
+                    tempCtx.translate(center.x + scaledOffsetX, center.y + scaledOffsetY);
                     tempCtx.rotate(imageRotation * Math.PI / 180);
                     tempCtx.drawImage(uploadedImage, -scaledWidth / 2, -scaledHeight / 2, scaledWidth, scaledHeight);
                     
@@ -1197,13 +1412,20 @@ body {
                 }
 
                 const outlinePath = new Path2D();
-                drawShape(outlinePath, center, size - borderThickness / 2);
+                drawShape(outlinePath, center, size - scaledBorderThickness / 2);
 
                 if (addGlowCheckbox.checked) {
                     let currentGlowColor = glowColor;
                     if (useOutlineGlowCheckbox.checked) {
                         if (useGradientOutlineCheckbox.checked) {
-                            const colors = getGradientColors(gradientOutlineColorsDiv);
+                            let colors;
+                            
+                            if (useFillGradientOutlineCheckbox.checked && useGradientFillCheckbox.checked) {
+                                colors = getGradientColors(gradientFillColorsDiv);
+                            } else {
+                                colors = getGradientColors(gradientOutlineColorsDiv);
+                            }
+                            
                             if (colors.length > 0) {
                                 currentGlowColor = colors[0];
                             }
@@ -1211,15 +1433,22 @@ body {
                             currentGlowColor = outlineColor;
                         }
                     }
-                    tempCtx.shadowBlur = borderThickness * 2 * glowAmount;
+                    tempCtx.shadowBlur = scaledBorderThickness * 2 * glowAmount;
                     tempCtx.shadowColor = currentGlowColor;
                     tempCtx.shadowOffsetX = 0;
                     tempCtx.shadowOffsetY = 0;
                 }
                 
-                if (borderThickness > 0) {
+                if (scaledBorderThickness > 0) {
                     if (useGradientOutlineCheckbox.checked) {
-                        const colors = getGradientColors(gradientOutlineColorsDiv);
+                        let colors;
+                        
+                        if (useFillGradientOutlineCheckbox.checked && useGradientFillCheckbox.checked) {
+                            colors = getGradientColors(gradientFillColorsDiv);
+                        } else {
+                            colors = getGradientColors(gradientOutlineColorsDiv);
+                        }
+                        
                         if (colors.length > 1) {
                             const gradient = tempCtx.createLinearGradient(0, center.y - size/2, 0, center.y + size/2);
                             const step = 1 / (colors.length - 1);
@@ -1235,7 +1464,7 @@ body {
                     } else {
                          tempCtx.strokeStyle = hexToRgbA(outlineColor, outlineOpacity);
                     }
-                    tempCtx.lineWidth = borderThickness;
+                    tempCtx.lineWidth = scaledBorderThickness;
                     tempCtx.stroke(outlinePath);
                 }
 
@@ -1277,7 +1506,7 @@ body {
                 const imageURL = croppedCanvas.toDataURL('image/png');
                 const link = document.createElement('a');
                 link.href = imageURL;
-                link.download = `custom_cursor_${currentShape}.png`;
+                link.download = `custom_cursor_${currentShape}_${exportSize}x${exportSize}.png`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
